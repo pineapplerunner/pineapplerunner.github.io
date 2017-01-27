@@ -1,17 +1,682 @@
 <!DOCYPE html>
 <html>
     <head>
-<link rel="stylesheet" href="styles.css"/>
+        
+<!-- Begin
+redValue = 255;
+blueValue = 255;
+greenValue = 255;
+redForeValue = 0;
+blueForeValue = 0;
+greenForeValue = 0;
+maxValue = 255;
+hexValues = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F");
+i = 0;
+function toHex(integer) {
+hexDigit1 = Math.floor(integer / 16);
+hexDigit2 = (integer % 16);
+return hexValues[hexDigit1] + hexValues[hexDigit2];
+}
+function shiftFG() {
+redFGHex = toHex(redForeValue);
+blueFGHex = toHex(blueForeValue);
+greenFGHex = toHex(greenForeValue);
+bigFGHex = redFGHex + greenFGHex + blueFGHex;
+document.fgColor = bigFGHex;
+document.Interface.fgHex.value = bigFGHex;
+document.Interface.redFG.value = redForeValue;
+document.Interface.blueFG.value = blueForeValue;
+document.Interface.greenFG.value = greenForeValue;
+}
+function shiftBG() {
+redHex = toHex(redValue);
+blueHex = toHex(blueValue);
+greenHex = toHex(greenValue);
+bigHex = redHex + greenHex + blueHex;
+document.bgColor = bigHex;
+document.Interface.bgHex.value = bigHex;
+document.Interface.red.value = redValue;
+document.Interface.blue.value = blueValue;
+document.Interface.green.value = greenValue;
+}
+function incrementRed(isBackground) {
+if (isBackground == true ) {
+redValue = redValue + 8;
+if (redValue > maxValue) { 
+redValue = 0;
+}
+shiftBG();
+}
+if (isBackground == false) { 
+redForeValue = redForeValue + 8;
+if (redForeValue > maxValue) {
+redForeValue = 0;
+}
+shiftFG();
+}
+}
+function decrementRed(isBackground) {
+if (isBackground == true) {
+redValue = redValue - 8;
+if (redValue < 0 ) {
+redValue = 255;
+}
+shiftBG();
+}
+else {
+redForeValue = redForeValue - 8;
+if (redForeValue < 0) {
+redForeValue = 255;
+}
+shiftFG();
+}
+}
+function setRed(value, isBackground) {
+if(value > -1 && value < 256) {
+if( isBackground == true ) {
+redValue = value;
+shiftBG();
+}
+else {
+redForeValue = value;
+shiftFG();
+}
+}
+}
+function incrementBlue(isBackground) {
+if ( isBackground == true ) {
+blueValue = blueValue + 8;
+if (blueValue > maxValue) {
+blueValue = 0;
+} 
+shiftBG();
+}
+else { 
+blueForeValue = blueForeValue + 8;
+if ( blueForeValue > maxValue ) {
+blueForeValue = 0;
+}
+shiftFG();
+}
+}
+function decrementBlue(isBackground) {
+if (isBackground == true) {
+blueValue = blueValue - 8;
+if (blueValue < 0) {
+blueValue = 255;
+}
+shiftBG();
+}
+else {
+blueForeValue = blueForeValue - 8;
+if (blueForeValue < 0) {
+blueForeValue = 255;
+}
+shiftFG();
+}
+}
+function setBlue(value, isBackground) {
+if (value > -1 && value < 256) {
+if ( isBackground == true ) {
+blueValue = value;
+shiftBG();
+}
+else {
+blueForeValue = value;
+shiftFG();
+}
+}
+}
+function incrementGreen(isBackground) {
+if (isBackground == true) {
+greenValue = greenValue + 8;
+if (greenValue > maxValue) {
+greenValue = 0;
+}
+shiftBG();
+}
+else {
+greenForeValue = greenForeValue + 8;
+if (greenForeValue > maxValue) {
+greenForeValue = 0;
+}
+shiftFG();
+}
+}
+function decrementGreen(isBackground) {
+if (isBackground == true) {
+greenValue = greenValue - 8;
+if (greenValue < 0 ) {
+greenValue = 255;
+}
+shiftBG();
+}
+else {
+greenForeValue = greenForeValue - 8;
+if (greenForeValue < 0) {
+greenForeValue = 255;
+}
+shiftFG();
+}
+}
+function setGreen(value, isBackground) {
+if ( value > -1 && value < 256 ) {
+if ( isBackground == true ) {
+greenValue = value;
+shiftBG();
+}
+else {
+greenForeValue = value;
+shiftFG();
+}
+}
+}
+function unHex(string, fgbg) {
+hex = string.toUpperCase();
+counter = 0;
+while (hex.charAt(0) != hexValues[counter])
+counter++;
+r = 16 * counter;
+counter = 0;
+while (hex.charAt(1) != hexValues[counter])
+counter++;
+r = r + counter;
+counter = 0;
+while (hex.charAt(2) != hexValues[counter])
+counter++;
+g = 16 * counter;
+counter = 0;
+while (hex.charAt(3) != hexValues[counter])
+counter++;
+g = g + counter;
+counter = 0;
+while (hex.charAt(4) != hexValues[counter])
+counter++;
+b = 16 * counter;
+counter = 0;
+while (hex.charAt(5) != hexValues[counter])
+counter++;
+b = b + counter;
+if (fgbg == "bg") {
+redValue = r;
+blueValue = b;
+greenValue = g;
+document.Interface.red.value = redValue;
+document.Interface.blue.value = blueValue;
+document.Interface.green.value = greenValue;
+}
+if (fgbg == "fg") {
+redForeValue = r;
+blueForeValue = b;
+greenForeValue = g;
+document.Interface.redFG.value = redForeValue;
+document.Interface.blueFG.value = blueForeValue;
+document.Interface.greenFG.value = greenForeValue;
+}
+} 
+function validChar(char) {
+for (j = 0; j < hexValues.length; j++) {
+if (char == hexValues[j]) {
+return true;
+}
+}
+return false;
+}
+function isHex(string) {
+if (string.length != 6) { 
+return false;
+}
+for (k = 0; k < 6; k++) {
+if (! validChar(string.charAt(k))) {
+return false;
+}
+}
+return true;
+}
+function setBGHex(value) {
+if (isHex(value.toUpperCase())) {
+document.bgColor = value;
+unHex(value, "bg");
+}
+}
+function setFGHex(value) {
+if (isHex(value.toUpperCase())) {
+document.fgColor = value;
+unHex(value, "fg");
+}
+}
+// End -->
+</script>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
+<title>New Page 2</title>
+
+<marquee>Welcome! This is a starting website made by your boy Pineapple Runner... Hope you like it! Thanks!!! :D</marquee>
+</head>
+
+
+<table style="border-width: 0px;width: 260px; height: 107px">
+	<tr>
+		<td style="border-style: solid;border-width: 0px;background-color: #DFDFFF; width: 281px;">
+		<form action="" method="post" ><h1 style="text-align: center">Login</h1>
+<table style='border:0px solid #000000;'>
+<tr>
+<td align='right'>
+Username: <input type='text' size='15' maxlength='25' name='username'>
+</td>
+</tr>
+<tr>
+<td align='right'>
+Password: <input type='password' size='15' maxlength='25' name='password'>
+</td>
+</tr>
+<tr>
+<td align='center'>
+<input type="submit" value="Login" style="width: 62px; height: 34px"></td>
+</tr>
+</table>
+		</form>
+		</td>
+	</tr>
+</table>
+
+<br>
+
+<body>
+    
+    
+<center>
+<form name=Interface>
+<table border=4 cellspacing=0 cellpadding=4>
+<tr>
+<td colspan=3 align=center>Background</td>
+<td><input type=text name=bgHex onKeyup="setBGHex(this.value)"></td>
+<td colspan=2 align=center>Foreground</td>
+<td><input type=text name=fgHex onKeyup="setFGHex(this.value)"></td>
+</tr>
+<tr>
+<td>Red</td>
+<td><input type=button value=" + " onClick="incrementRed(true)"></td>
+<td><input type=button value=" - " onClick="decrementRed(true)"></td>
+<td><input type=text name="red" onKeyup="setRed(this.value, true)"></td>
+<td><input type=button value=" + " onClick="incrementRed(false)"></td>
+<td><input type=button value=" - " onClick="decrementRed(false)"></td>
+<td><input type=text name=redFG onKeyup="setRed(this.value, false)"></td>
+</tr>
+<tr>
+<td>Green</td>
+<td><input type=button value=" + " onClick="incrementGreen(true)"></td>
+<td><input type=button value=" - " onClick="decrementGreen(true)"></td>
+<td><input type=text name="green" onKeyup="setGreen(this.value, true)"></td>
+<td><input type=button value=" + " onClick="incrementGreen(false)"></td>
+<td><input type=button value=" - " onClick="decrementGreen(false)"></td>
+<td><input type=text name=greenFG onKeyup="setGreen(this.value, false)"></td>
+</tr>
+<tr>
+<td>Blue</td>
+<td><input type=button value=" + " onClick="incrementBlue(true)"></td>
+<td><input type=button value=" - " onClick="decrementBlue(true)"></td>
+<td><input type=text name="blue" onKeyup="setBlue(this.value, true)"></td>
+<td><input type=button value=" + " onClick="incrementBlue(false)"></td>
+<td><input type=button value=" - " onClick="decrementBlue(false)"></td>
+<td><input type=text name=blueFG onKeyup="setBlue(this.value, false)"></td>
+</tr>
+</table>
+</form>
+</center>
+
+<table border="0" width="200" cellspacing="0" cellpadding="3">
+<form name="where">
+  <tr>
+    <td width="100%">
+<select name="city" size="1" onchange="updateclock(this);"> 
+<option value="" selected>Local time</option>
+<option value="0">London GMT</option> 
+<option value="1">Rome</option>
+<option value="7">Bangkok</option>
+<option value="8">Hong Kong</option>
+<option value="9">Tokyo</option> 
+<option value="10">Sydney</option>
+<option value="12">Fiji</option>
+<option value="-10">Hawaii</option>
+<option value="-8">San Francisco</option> 
+<option value="-5">New York</option>
+<option value="-3">Buenos Aires</option>
+<option value="-6">Mexico</option>
+</select>
+
+</td>
+  </tr>
+  <tr>
+    <td width="100%">
+<script language="JavaScript">
+
+/*
+Drop Down World Clock- By Learn iran (http://www.webloger.5u.com)
+Portions of code by Kurt @ http://www.webloger.5u.com/
+This credit notice must stay intact
+*/
+
+if (document.all||document.getElementById)
+document.write('<span id="worldclock" style="font:bold 16px Arial;"></span><br>')
+
+zone=0;
+isitlocal=true;
+ampm='';
+
+function updateclock(z){
+zone=z.options[z.selectedIndex].value;
+isitlocal=(z.options[0].selected)?true:false;
+}
+
+function WorldClock(){
+now=new Date();
+ofst=now.getTimezoneOffset()/60;
+secs=now.getSeconds();
+sec=-1.57+Math.PI*secs/30;
+mins=now.getMinutes();
+min=-1.57+Math.PI*mins/30;
+hr=(isitlocal)?now.getHours():(now.getHours() + parseInt(ofst)) + parseInt(zone);
+hrs=-1.575+Math.PI*hr/6+Math.PI*parseInt(now.getMinutes())/360;
+if (hr < 0) hr+=24;
+if (hr > 23) hr-=24;
+ampm = (hr > 11)?"PM":"AM";
+statusampm = ampm.toLowerCase();
+
+hr2 = hr;
+if (hr2 == 0) hr2=12;
+(hr2 < 13)?hr2:hr2 %= 12;
+if (hr2<10) hr2="0"+hr2
+
+var finaltime=hr2+':'+((mins < 10)?"0"+mins:mins)+':'+((secs < 10)?"0"+secs:secs)+' '+statusampm;
+if (document.all)
+worldclock.innerHTML=finaltime
+else if (document.getElementById)
+document.getElementById("worldclock").innerHTML=finaltime
+else if (document.layers){
+document.worldclockns.document.worldclockns2.document.write(finaltime)
+document.worldclockns.document.worldclockns2.document.close()
+}
+
+
+setTimeout('WorldClock()',1000);
+}
+
+window.onload=WorldClock
+//-->
+</script>
+
+<!--Place holder for NS4 only-->
+<ilayer id="worldclockns" width=100% height=35><layer id="worldclockns2" width=100% height=35 left=0 top=0 style="font:bold 16px Arial;"></layer></ilayer>
+
+</td>
+</form>
+  </tr>
+</table>
+
+<!-- Search Google -->
+<center>
+<FORM method=GET action="http://www.google.com/search">
+<TABLE bgcolor="#FFFFFF"><tr><td>
+<A HREF="http://www.google.com/">
+<IMG SRC="http://www.google.com/logos/Logo_40wht.gif" <br></A>
+<INPUT TYPE=text name=q size=31 maxlength=255 value="">
+<INPUT TYPE=hidden name=hl value="en">
+<INPUT type=submit name=btnG VALUE="Google Search">
+</td></tr></TABLE>
+</FORM>
+</center>
+<!-- Search Google -->
+
+
+
+</body>
+        
+<link rel="stylesheet" href="styles.css"/>`
     </head>
+    <style>
+    body {
+        background-image: url("http://www.hdwallpapers.in/walls/blue_background_abstract-wide.jpg");
+    }
+    </style>
     <body>
-        <img src="https://s-media-cache-ak0.pinimg.com/originals/a3/ee/36/a3ee36834d23d9089456c6f10472da24.png">
-        <img src="http://kingofwallpapers.com/run/run-009.jpg">
+        <img src="https://www.uwalumni.com/wp-content/uploads/HeroImage-WelcomeToTheCity.gif">
+        <img src="">
         <h1>Pineapple Runner</h1>
         <h2>This is your boy Pineapple Runner</h2>
         <p>"With God anything is possible"</p>
         <p>"Train Hard and smart... Win easy...-Pina Bros & Fam"</p>
-        <img src="http://slco.org/recreation/holladayLions/youthSports/images/TF.jpg">
+        <img src="http://www.daileyfitness.com/wp-content/uploads/2015/06/anything_is_possible.jpg">
         <h2>RUNNING IS A WHOLE NEW WORLD!!!</h2>
-        <a href="http://designshack.net/" class="button">Become a Pineapple Runner</a>
+        <h3>Links for websites</h3>
+        <a href="https://sanjoseca.infinitecampus.org/campus/portal/sanjose.jsp" class="button">Infinite Campus</a>
+        <a href="https://www.youtube.com/" class="button">YouTube</a>
+        
+        <p>
+<object id="media1" height="150" type="video/x-ms-wmv" width="200">
+	<param name="player" value="File.jjj">
+</object>
+</p>
+
+<script type='text/javascript' src='http://m.free-codes.org/gh.php?id=2001'></script>
+<CENTER>
+
+<FORM name="Keypad" action="">
+<TABLE>
+<B>
+<TABLE border=2 width=50 height=60 cellpadding=1 cellspacing=5>
+<TR>
+<TD colspan=3 align=middle>
+<input name="ReadOut" type="Text" size=24 value="0" width=100%>
+</TD>
+<TD
+</TD>
+<TD>
+<input name="btnClear" type="Button" value="  C  " onclick="Clear()">
+</TD>
+<TD><input name="btnClearEntry" type="Button" value="  CE " onclick="ClearEntry()">
+</TD>
+</TR>
+<TR>
+<TD>
+<input name="btnSeven" type="Button" value="  7  " onclick="NumPressed(7)">
+</TD>
+<TD>
+<input name="btnEight" type="Button" value="  8  " onclick="NumPressed(8)">
+</TD>
+<TD>
+<input name="btnNine" type="Button" value="  9  " onclick="NumPressed(9)">
+</TD>
+<TD>
+</TD>
+<TD>
+<input name="btnNeg" type="Button" value=" +/- " onclick="Neg()">
+</TD>
+<TD>
+<input name="btnPercent" type="Button" value="  % " onclick="Percent()">
+</TD>
+</TR>
+<TR>
+<TD>
+<input name="btnFour" type="Button" value="  4  " onclick="NumPressed(4)">
+</TD>
+<TD>
+<input name="btnFive" type="Button" value="  5  " onclick="NumPressed(5)">
+</TD>
+<TD>
+<input name="btnSix" type="Button" value="  6  " onclick="NumPressed(6)">
+</TD>
+<TD>
+</TD>
+<TD align=middle><input name="btnPlus" type="Button" value="  +  " onclick="Operation('+')">
+</TD>
+<TD align=middle><input name="btnMinus" type="Button" value="   -   " onclick="Operation('-')">
+</TD>
+</TR>
+<TR>
+<TD>
+<input name="btnOne" type="Button" value="  1  " onclick="NumPressed(1)">
+</TD>
+<TD>
+<input name="btnTwo" type="Button" value="  2  " onclick="NumPressed(2)">
+</TD>
+<TD>
+<input name="btnThree" type="Button" value="  3  " onclick="NumPressed(3)">
+</TD>
+<TD>
+</TD>
+<TD align=middle><input name="btnMultiply" type="Button" value="  *  " onclick="Operation('*')">
+</TD>
+<TD align=middle><input name="btnDivide" type="Button" value="   /   " onclick="Operation('/')">
+</TD>
+</TR>
+<TR>
+<TD>
+<input name="btnZero" type="Button" value="  0  " onclick="NumPressed(0)">
+</TD>
+<TD>
+<input name="btnDecimal" type="Button" value="   .  " onclick="Decimal()">
+</TD>
+<TD colspan=3>
+</TD>
+<TD>
+<input name="btnEquals" type="Button" value="  =  " onclick="Operation('=')">
+</TD>
+</TR>
+</TABLE>
+</TABLE>
+</B>
+</FORM>
+</CENTER>
+<font face="Verdana, Arial, Helvetica" size=2>
+<SCRIPT LANGUAGE="JavaScript">
+<!-- Begin
+var FKeyPad = document.Keypad;
+var Accumulate = 0;
+var FlagNewNum = false;
+var PendingOp = "";
+function NumPressed (Num) {
+if (FlagNewNum) {
+FKeyPad.ReadOut.value  = Num;
+FlagNewNum = false;
+   }
+else {
+if (FKeyPad.ReadOut.value == "0")
+FKeyPad.ReadOut.value = Num;
+else
+FKeyPad.ReadOut.value += Num;
+   }
+}
+function Operation (Op) {
+var Readout = FKeyPad.ReadOut.value;
+if (FlagNewNum && PendingOp != "=");
+else
+{
+FlagNewNum = true;
+if ( '+' == PendingOp )
+Accumulate += parseFloat(Readout);
+else if ( '-' == PendingOp )
+Accumulate -= parseFloat(Readout);
+else if ( '/' == PendingOp )
+Accumulate /= parseFloat(Readout);
+else if ( '*' == PendingOp )
+Accumulate *= parseFloat(Readout);
+else
+Accumulate = parseFloat(Readout);
+FKeyPad.ReadOut.value = Accumulate;
+PendingOp = Op;
+   }
+}
+function Decimal () {
+var curReadOut = FKeyPad.ReadOut.value;
+if (FlagNewNum) {
+curReadOut = "0.";
+FlagNewNum = false;
+   }
+else
+{
+if (curReadOut.indexOf(".") == -1)
+curReadOut += ".";
+   }
+FKeyPad.ReadOut.value = curReadOut;
+}
+function ClearEntry () {
+FKeyPad.ReadOut.value = "0";
+FlagNewNum = true;
+}
+function Clear () {
+Accumulate = 0;
+PendingOp = "";
+ClearEntry();
+}
+function Neg () {
+FKeyPad.ReadOut.value = parseFloat(FKeyPad.ReadOut.value) * -1;
+}
+function Percent () {
+FKeyPad.ReadOut.value = (parseFloat(FKeyPad.ReadOut.value) / 100) * parseFloat(Accumulate);
+}
+// End -->
+</SCRIPT>
+
+<!-- Begin
+var checkflag = "false";
+function check(field) {
+if (checkflag == "false") {
+for (i = 0; i < field.length; i++) {
+field[i].checked = true;}
+checkflag = "true";
+return "Uncheck All"; }
+else {
+for (i = 0; i < field.length; i++) {
+field[i].checked = false; }
+checkflag = "false";
+return "Check All"; }
+}
+//  End -->
+</script>
+</HEAD>
+
+<!-- CONTINUE  -->
+
+<BODY>
+
+<center>
+<form name=myform action="" method=post>
+<table>
+<tr><td>
+<b>Your Favorite Color</b><br>
+<input type=checkbox name=list value="1">Red<br>
+<input type=checkbox name=list value="2">Pink<br>
+<input type=checkbox name=list value="3">Green<br>
+<input type=checkbox name=list value="4">BLUE<br>
+<input type=checkbox name=list value="5">Yellow<br>
+<input type=checkbox name=list value="6">Purple<br>
+<input type=checkbox name=list value="7">White<br>
+<input type=checkbox name=list value="8">Black<br>
+<input type="submit" value="Submit"
+
+<br>                                                    
+<input type=button value="Check All" onClick="this.value=check(this.form.list)"> 
+</td></tr>
+</table>
+</form>
+</center>
+
+<form action="pinaomar1@gmail.com" method="get">
+  First name: <input type="text" name="fname"><br>
+  Last name: <input type="text" name="lname"><br>
+<textarea name="comments" id="comments" style="font-family:sans-serif;font-size:1.2em;">
+What can I do to make it better???
+</textarea>
+</div>
+
+
+<input type="text" name="testField" maxlength="50" size="30" value="Comment">
+<br />
+<input type="submit" value="Submit">
+</form> 
     </body>
 </html>
